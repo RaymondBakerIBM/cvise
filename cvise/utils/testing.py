@@ -380,6 +380,8 @@ class TestManager:
                         pass
             except psutil.NoSuchProcess:
                 pass
+            except psutil.AccessDenied:
+                pass
 
     def release_future(self, future):
         self.futures.remove(future)

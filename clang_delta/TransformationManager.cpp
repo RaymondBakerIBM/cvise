@@ -163,7 +163,7 @@ bool TransformationManager::initializeCompilerInstance(std::string &ErrorMsg)
     ClangInstance->createFileManager();
 
     if(CLCPath != NULL && ClangInstance->hasFileManager() &&
-       ClangInstance->getFileManager().getDirectory(CLCPath, false)) {
+       ClangInstance->getFileManager().getOptionalDirectoryRef(CLCPath, false).has_value()) {
         Args.push_back("-I");
         Args.push_back(CLCPath);
     }
