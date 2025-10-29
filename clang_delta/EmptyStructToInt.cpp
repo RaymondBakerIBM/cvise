@@ -23,6 +23,8 @@
 #include "llvm/ADT/StringRef.h"
 #include "TransformationManager.h"
 
+#include <iostream>
+
 using namespace clang;
 
 static const char *DescriptionMsg =
@@ -181,8 +183,11 @@ bool EmptyStructToIntRewriteVisitor::VisitElaboratedTypeLoc(
   //  struct <anonymous struct ...> S;
   // the last declaration is injected by clang.
   // We need to omit it.
+
   if (StartBuf > EndBuf) {
     SourceLocation KeywordLoc = Loc.getElaboratedKeywordLoc();
+    if (KeywordLoc.isInvalid())
+      return true;
     const llvm::StringRef Keyword = 
       TypeWithKeyword::getKeywordName(ETy->getKeyword());
     ConsumerInstance->TheRewriter.ReplaceText(KeywordLoc, 
