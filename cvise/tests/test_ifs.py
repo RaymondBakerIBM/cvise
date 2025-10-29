@@ -4,6 +4,7 @@ import unittest
 
 from cvise.passes.abstract import ProcessEventNotifier
 from cvise.passes.ifs import IfPass
+from cvise.passes.abstract import PassResult
 
 
 class LineMarkersTestCase(unittest.TestCase):
@@ -80,7 +81,9 @@ class LineMarkersTestCase(unittest.TestCase):
             with tempfile.NamedTemporaryFile(mode='w', delete=False) as tmp_file:
                 tmp_file.write(in_contents)
 
-            (_, state) = self.pass_.transform(tmp_file.name, state, self.process_event_notifier)
+            (res, state) = self.pass_.transform(tmp_file.name, state, self.process_event_notifier)
+            self.assertEqual(res, PassResult.OK)
+
             with open(tmp_file.name) as variant_file:
                 variant = variant_file.read()
                 outs.append((state.index, state.value, state.chunk, variant))
